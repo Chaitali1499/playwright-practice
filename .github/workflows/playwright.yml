@@ -1,0 +1,82 @@
+name: Playwright Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+
+
+# GitHub Actions can automatically run Playwright tests whenever code is pushed or a pull request is created.
+
+# YAML file tells GitHub Actions how to run your Playwright tests.
+# You write Playwright test
+#         ↓
+# git push
+#         ↓
+# GitHub
+#         ↓
+# GitHub Actions starts
+#         ↓
+# Install dependencies
+#         ↓
+# Install browsers
+#         ↓
+# Run Playwright tests
+#         ↓
+# Report result
+
+# How can you integrate Playwright with CI/CD?
+# “I can integrate Playwright with GitHub Actions by creating a workflow that installs Node.js 
+# and project dependencies, installs Playwright browsers, and runs the Playwright test command. 
+# The workflow can be triggered on code push or pull requests, and the test report can be published as an artifact.”
+
+# GitHub Actions executes your Playwright test suite.
+# Git push
+#    ↓
+# GitHub Actions
+#    ↓
+# Ubuntu machine
+#    ↓
+# Checkout code
+#    ↓
+# Install Node
+#    ↓
+# npm ci
+#    ↓
+# Install Playwright browsers
+#    ↓
+# npx playwright test
+#    ↓
+# PASS / FAIL
+
+# Explain your Playwright CI/CD setup.
+
+# “I use GitHub Actions to execute my Playwright tests automatically on code pushes and pull requests. 
+# The workflow checks out the code, sets up Node.js, installs project dependencies and Playwright browsers, 
+# and then runs the Playwright test suite.”
+
+# How does your Playwright test get triggered in CI?
+# “When I push my code to GitHub, the GitHub Actions workflow is triggered. 
+# It sets up the environment, installs dependencies and Playwright browsers, and executes the Playwright test suite.”
