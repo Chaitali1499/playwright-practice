@@ -1,9 +1,11 @@
 const { test } = require('../fixtures/test-fixture');
 const loginData = require('../test-data/loginData.json');
 
-test('Login and verify secure page', async ({ page, loginPage, securePage }) => {
+test.beforeEach(async ({ loginPage }) => {
+    await loginPage.open();
+});
 
-       await page.goto('/login');
+test('Login and verify secure page', async ({ loginPage, securePage }) => {
 
     await loginPage.login(
         loginData.validUser.username,
@@ -14,13 +16,14 @@ test('Login and verify secure page', async ({ page, loginPage, securePage }) => 
     await securePage.verifySuccessMessage();
 });
 
-test('Invalid login should show error message', async ({page, loginPage}) => {
-    await page.goto('/login');
+for( const data of loginData.invalidLogins)
 
-    await loginPage.login(
-        loginData.invalidUser.username,
-        loginData.invalidUser.password
-    );
+    test(`Invalid login- ${data.username}`, async({ loginPage}) => {
+        
+        await loginPage.login(
+            data.username,
+            data.password
+        );
 
-    await loginPage.verifyLoginError();
+        await loginPage.verifyLoginError(data.expectedMessage);
 });

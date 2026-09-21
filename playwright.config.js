@@ -1,6 +1,10 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
-require('dotenv').config();
+import dotenv from 'dotenv';
+
+dotenv.config({
+    path: `.env.${process.env.TEST_ENV || 'qa'}`
+});
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -39,19 +43,37 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+        name: 'setup',
+        testMatch: /.*\.setup\.js/
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+        name: 'chromium',
+        use: {
+            ...devices['Desktop Chrome'],
+            storageState: 'auth/auth.json'
+        },
+        dependencies: ['setup']
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+        name: 'firefox',
+        use: {
+            ...devices['Desktop Firefox'],
+            storageState: 'auth/auth.json'
+        },
+        dependencies: ['setup']
     },
+
+    {
+        name: 'webkit',
+        use: {
+            ...devices['Desktop Safari'],
+            storageState: 'auth/auth.json'
+        },
+        dependencies: ['setup']
+    }
+
 
     /* Test against mobile viewports. */
     // {
@@ -252,3 +274,17 @@ export default defineConfig({
 //What is the difference between Playwright Report and Trace Viewer?
 //“The HTML report gives an overall summary of test execution, including passed and failed tests. 
 // Trace Viewer is used for detailed debugging of a specific test by showing actions, screenshots, DOM snapshots, network activity and other execution details.”
+
+
+// | Setting         | Purpose                                        |
+// | --------------- | ---------------------------------------------- |
+// | `testDir`       | Where tests are located                        |
+// | `fullyParallel` | Allows tests to run in parallel                |
+// | `retries`       | Retries failed tests in CI                     |
+// | `workers`       | Controls parallel workers                      |
+// | `reporter`      | Generates HTML report                          |
+// | `baseURL`       | Common application URL                         |
+// | `screenshot`    | Captures screenshot on failure                 |
+// | `trace`         | Captures trace on retry                        |
+// | `projects`      | Runs tests on different browsers               |
+// | `dependencies`  | Runs authentication setup before browser tests |

@@ -12,7 +12,23 @@ const test = base.extend({
     securePage: async ({ page }, use) => {
         const securePage = new SecurePage(page);
         await use(securePage);
+    },
+
+    loggedIn: async ({ loginPage }, use) => {
+
+        await loginPage.open();
+
+        await loginPage.login(
+            process.env.TEST_USERNAME,
+            process.env.TEST_PASSWORD
+        );
+
+        await use();
     }
 });
 
 module.exports = { test };
+
+// loginPage → gives tests a LoginPage object.
+// securePage → gives tests a SecurePage object.
+// loggedIn → automatically performs login before a secure test.

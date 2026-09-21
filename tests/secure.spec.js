@@ -1,19 +1,19 @@
-const { test } = require ('../fixtures/test-fixture');
+const { test } = require('../fixtures/test-fixture');
 
-test ('Verify logout test', async ({page, loginpage, securePage}) => {
-   
-    await page.goto('/login');
+test('Verify secure page after login @smoke', async ({ loggedIn, securePage }) => {
 
-    await loginpage.login(
-        process.env.TEST_USERNAME,
-        process.env.TEST_PASSWORD
-    );
+    await securePage.verifySecurePageAfterLogin();
 
-    await securePage.verifySecurePage();
+});
+
+test('Verify logout functionality @regression', async ({ loggedIn, securePage }) => {
+
+    await securePage.verifySecurePageAfterLogin();
 
     await securePage.logout();
-
-    await page.waitForURL('**/login');
-
-    console.log('User successfully logged out');
+    await securePage.verifyLogout();
 });
+
+// “How do you run only smoke tests in Playwright?”, you can say:
+// “I use tags in the test names and Playwright's --grep option.
+// For example, npx playwright test --grep "@smoke" runs only the tests tagged with @smoke.”

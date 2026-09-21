@@ -3,8 +3,21 @@
         "username": "tomsmith",
         "password": "SuperSecretPassword!"
     },
-    "invalidUser": {
-        "username": "wronguser",
-        "password": "wrongpassword"
-    }
+    "invalidLogins": [
+        {
+            "username": "wronguser",
+            "password": "wrongpassword",
+            "expectedMessage": "Your username is invalid!"
+        },
+        {
+            "username": "wronguser2",
+            "password": "wrongpassword",
+            "expectedMessage": "Your username is invalid!"
+        },
+        {
+            "username": "tomsmith",
+            "password": "wrongpassword",
+            "expectedMessage": "Your password is invalid!"
+        }
+    ]
 }

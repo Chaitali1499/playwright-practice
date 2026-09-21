@@ -17,8 +17,17 @@ class SecurePage {
         });
     }
 
+    async verifySecurePageAfterLogin() {
+        await this.verifySecurePage();
+        await this.verifySuccessMessage();
+    }
+
     async verifySecurePage() {
         await expect(this.secureHeading).toBeVisible();
+    }
+
+    async isLoggedIn() {
+        return await this.secureHeading.isVisible();
     }
 
     async verifySuccessMessage() {
@@ -28,6 +37,17 @@ class SecurePage {
 
     async logout() {
         await this.logoutLink.click();
+    }
+
+    async verifyLogout() {
+        await expect(this.page).toHaveURL(/.*\/login/);
+
+        await expect(
+        this.page.getByRole('heading', {
+            name: 'Login Page',
+            exact: true
+        })
+        ).toBeVisible();
     }
 }
 
