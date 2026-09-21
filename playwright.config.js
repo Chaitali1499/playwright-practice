@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig, devices } from '@playwright/test';
-
+require('dotenv').config();
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -30,7 +30,7 @@ export default defineConfig({
     // baseURL: 'http://localhost:3000',
     headless: false,
     screenshot: 'only-on-failure',
-    baseURL: 'https://the-internet.herokuapp.com',
+    baseURL: process.env.BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',

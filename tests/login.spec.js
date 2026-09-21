@@ -1,9 +1,26 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
+const { test } = require('../fixtures/test-fixture');
+const loginData = require('../test-data/loginData.json');
 
-test('Login test using POM', async({page}) => {
-    const loginpage = new LoginPage(page);
-    await page.goto('https://the-internet.herokuapp.com/login');
-    await loginpage.login('tomsmith', 'SuperSecretPassword!');
-    await loginpage.verifyLoginSuccess();
+test('Login and verify secure page', async ({ page, loginPage, securePage }) => {
+
+       await page.goto('/login');
+
+    await loginPage.login(
+        loginData.validUser.username,
+        loginData.validUser.password
+    );
+
+    await securePage.verifySecurePage();
+    await securePage.verifySuccessMessage();
+});
+
+test('Invalid login should show error message', async ({page, loginPage}) => {
+    await page.goto('/login');
+
+    await loginPage.login(
+        loginData.invalidUser.username,
+        loginData.invalidUser.password
+    );
+
+    await loginPage.verifyLoginError();
 });

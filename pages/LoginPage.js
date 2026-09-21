@@ -1,4 +1,5 @@
-export class LoginPage {
+const { expect } = require('@playwright/test');
+class LoginPage {
 
     constructor(page) {
         this.page = page;
@@ -6,6 +7,7 @@ export class LoginPage {
         this.username = page.locator('#username');
         this.password = page.locator('#password');
         this.loginButton = page.locator('button[type="submit"]');
+        this.flashMessage = page.locator('#flash');
     }
 
     async login(username, password) {
@@ -18,4 +20,10 @@ export class LoginPage {
     await expect(this.page.locator('#flash'))
         .toContainText('You logged into a secure area!');
     }
+
+    async verifyLoginError() {
+    await expect(this.flashMessage)
+        .toContainText('Your username is invalid!');
+    }
 }
+module.exports = { LoginPage };
